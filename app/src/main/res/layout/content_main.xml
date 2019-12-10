@@ -19,5 +19,5 @@
         android:id="@+id/button2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="查数据库12356345" />
+        android:text="查数据库" />
 </LinearLayout>

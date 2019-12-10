@@ -34,12 +34,13 @@ import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 public class MainActivity extends AppCompatActivity {
     private HttpUtil httpUtil;
     private DBUtil dbUtil;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         requestAllPower();
-        dbUtil=DBUtil.getInstance();
+        dbUtil = DBUtil.getInstance();
         findViewById(R.id.getData).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -53,8 +54,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-    private void initData(){
-        httpUtil=HttpUtil.getInstance();
+
+    private void initData() {
+        httpUtil = HttpUtil.getInstance();
         dbUtil.createTable();
         httpUtil.asynch("/app/init", httpUtil.TYPE_POST, null, new Callback() {
             @Override
@@ -64,43 +66,43 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                if(response.isSuccessful()){
-                   try{
-                       String data=response.body().string();
-                       JSONObject jsonObject=new JSONObject(data);
-                       String list=jsonObject.getString("data");
-                       JSONObject j=new JSONObject(list);
-                       JSONArray jsonArray=j.getJSONArray("trainTypeList");
-                       dbUtil.db.beginTransaction();
-                       String tableName="traintype";
-                       dbUtil.deleteAll(tableName);
-                       for(int i=0,num=jsonArray.length();i<num;i++){
-                           TrainTypeModel trainTypeModel=new TrainTypeModel(jsonArray.getJSONObject(i));
-                           ContentValues contentValues=new ContentValues();
-                           contentValues.put("traintypeid",trainTypeModel.getTrainTypeId());
-                           contentValues.put("traintypename",trainTypeModel.getTrainTypeName());
-                           Log.d("myapp",trainTypeModel.getTrainTypeName());
-                           Log.d("myapp",i+"");
-                           dbUtil.db.insert(tableName,null,contentValues);
-                       }
-                       dbUtil.db.setTransactionSuccessful();
-                       dbUtil.db.endTransaction();
+                if (response.isSuccessful()) {
+                    try {
+                        String data = response.body().string();
+                        JSONObject jsonObject = new JSONObject(data);
+                        String list = jsonObject.getString("data");
+                        JSONObject j = new JSONObject(list);
+                        JSONArray jsonArray = j.getJSONArray("trainTypeList");
+                        dbUtil.db.beginTransaction();
+                        String tableName = "traintype";
+                        dbUtil.deleteAll(tableName);
+                        for (int i = 0, num = jsonArray.length(); i < num; i++) {
+                            TrainTypeModel trainTypeModel = new TrainTypeModel(jsonArray.getJSONObject(i));
+                            ContentValues contentValues = new ContentValues();
+                            contentValues.put("traintypeid", trainTypeModel.getTrainTypeId());
+                            contentValues.put("traintypename", trainTypeModel.getTrainTypeName());
+                            Log.d("myapp", trainTypeModel.getTrainTypeName());
+                            Log.d("myapp", i + "");
+                            dbUtil.db.insert(tableName, null, contentValues);
+                        }
+                        dbUtil.db.setTransactionSuccessful();
+                        dbUtil.db.endTransaction();
 
-                   }catch (JSONException e){
-                       e.printStackTrace();
-                   }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
     }
 
-    private void getData(){
-        Cursor cursor=dbUtil.select("select * from traintype",null);
-        if(cursor!=null){
-            int i=0;
-            while (cursor.moveToNext()){
-                Log.d("myapp",cursor.getString(0)+cursor.getString(1));
-                Log.d("myapp",(i++)+"");
+    private void getData() {
+        Cursor cursor = dbUtil.select("select * from traintype", null);
+        if (cursor != null) {
+            int i = 0;
+            while (cursor.moveToNext()) {
+                Log.d("myapp", cursor.getString(0) + cursor.getString(1));
+                Log.d("myapp", (i++) + "");
             }
         }
     }
@@ -128,14 +130,14 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void requestAllPower(){
-        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    public void requestAllPower() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PERMISSION_GRANTED
                 || ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET)
                 != PERMISSION_GRANTED
-                ||ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
-                != PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(this,new String[]{ Manifest.permission.INTERNET,Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE},107);
+                || ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.INTERNET, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 107);
         }
     }
 }

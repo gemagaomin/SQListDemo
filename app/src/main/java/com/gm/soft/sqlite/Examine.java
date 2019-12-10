@@ -12,10 +12,10 @@ public class Examine {
     private String problemId;
     private String phonePath;
     private Date startTime;
-    private Date   endTime;
-    private Date   appTime;
-    private Date   startVerificationTime;
-    private Date   endVerificationTime;
+    private Date endTime;
+    private Date appTime;
+    private Date startVerificationTime;
+    private Date endVerificationTime;
     private String other;
     private String verificationId;
 

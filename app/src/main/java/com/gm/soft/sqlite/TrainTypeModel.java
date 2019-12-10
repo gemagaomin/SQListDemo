@@ -9,11 +9,12 @@ public class TrainTypeModel {
 
     public TrainTypeModel() {
     }
+
     public TrainTypeModel(JSONObject jsonObject) {
-        try{
-            this.trainTypeId=jsonObject.getString("id");
-            this.trainTypeName=jsonObject.getString("name");
-        }catch (JSONException e){
+        try {
+            this.trainTypeId = jsonObject.getString("id");
+            this.trainTypeName = jsonObject.getString("name");
+        } catch (JSONException e) {
         }
     }
 
@@ -35,6 +36,6 @@ public class TrainTypeModel {
 
     @Override
     public String toString() {
-        return  trainTypeName ;
+        return trainTypeName;
     }
 }
